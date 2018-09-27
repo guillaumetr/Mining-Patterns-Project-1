@@ -10,8 +10,6 @@ os.chdir("C:\\Users\Guillaume\Google Drive\Master Data Sciences\Q3\Mining patter
 
 from frequent_itemset_miner import *
 
-toy_data = Dataset(r"C:\\Users\Guillaume\Google Drive\Master Data Sciences\Q3\Mining patterns in data\Projet\Apriori\datasets\toy.dat")
-
 # select candidates according to the required min_support
 def create_cand1(set_items):
     can1=list()
@@ -53,24 +51,33 @@ def gen_next_cand(candidates):
 
         
 # Apriori algorithm 
-frequency={}
-cand1=create_cand1(toy_data.items)
-stop=False
-first=True
-candidates = []
-transactions=list(map(frozenset,toy_data.transactions))
 
-while stop == False:
-    if first==False:
-        candidates = gen_next_cand(candidates) 
-    else:
-        candidates = cand1
-        first=False
+def apriori(filepath, minFrequency):
+    
+    dataset = Dataset(filepath)
+    
+    frequency={}
+    cand1=create_cand1(dataset.items)
+    stop=False
+    first=True
+    candidates = []
+    transactions=list(map(frozenset,dataset.transactions))
+
+    while stop == False:
+        if first==False:
+            candidates = gen_next_cand(candidates) 
+        else:
+            candidates = cand1
+            first=False
          
-    candidates,new_freq = min_support_cand(transactions,candidates,0.2)
-    frequency.update(new_freq)
+        candidates,new_freq = min_support_cand(transactions,candidates,0.2)
+        frequency.update(new_freq)
     
-    if(len(candidates)==0):
-        stop=True
+        if(len(candidates)==0):
+            stop=True
    
+    return frequency
+
+#test
     
+apriori(r"C:\\Users\Guillaume\Google Drive\Master Data Sciences\Q3\Mining patterns in data\Projet\Apriori\datasets\toy.dat",0.2)
