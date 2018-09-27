@@ -5,12 +5,14 @@ Created on Wed Sep 26 16:07:52 2018
 @author: Guillaume
 """
 
+# working directory
 import os 
-os.chdir("C:\\Users\Guillaume\Google Drive\Master Data Sciences\Q3\Mining patterns in data\Projet\Apriori")
+os.chdir(r"C:\\Users\Guillaume\Documents\GitHub\Mining-Patterns-Project-1\Apriori")
 
+#import the module frequent_itemset_miner
 from frequent_itemset_miner import *
 
-# select candidates according to the required min_support
+# creation of the first candidates from the different individual items
 def create_cand1(set_items):
     can1=list()
     for i in set_items:
@@ -19,7 +21,7 @@ def create_cand1(set_items):
     return can1
     
     
-    
+# method that count the frequency for specfic candidates and select the ones which match with the minimal frequency
 def min_support_cand(transactions,candidates,min_frequency):
     support = {}
     for item_set in transactions:
@@ -34,11 +36,11 @@ def min_support_cand(transactions,candidates,min_frequency):
     for can in support.keys():
         if support[can]/len(transactions) >= min_frequency:
             frequency[can]=support[can]/len(transactions)
-            print(can,support[can])
             can_selected.append(can)
     return can_selected,frequency
 
-
+# method that generate new candidates based on those which have been selected
+# hyper naive --> TO BE IMPROVED
 def gen_next_cand(candidates):
     next_cand=[]
     k = len(candidates)
@@ -51,7 +53,6 @@ def gen_next_cand(candidates):
 
         
 # Apriori algorithm 
-
 def apriori(filepath, minFrequency):
     
     dataset = Dataset(filepath)
@@ -79,5 +80,4 @@ def apriori(filepath, minFrequency):
     return frequency
 
 #test
-    
 apriori(r"C:\\Users\Guillaume\Google Drive\Master Data Sciences\Q3\Mining patterns in data\Projet\Apriori\datasets\toy.dat",0.2)
