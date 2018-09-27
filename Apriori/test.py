@@ -36,6 +36,7 @@ def min_support_cand(transactions,candidates,min_frequency):
     for can in support.keys():
         if support[can]/len(transactions) >= min_frequency:
             frequency[can]=support[can]/len(transactions)
+            print(can,support[can])
             can_selected.append(can)
     return can_selected,frequency
 
@@ -45,34 +46,31 @@ def gen_next_cand(candidates):
     k = len(candidates)
     for i in range(k) :
         for j in range(i+1,k):
-            next_cand.append(candidates[i]|candidates[j])
+                if candidates[i]|candidates[j] not in next_cand:
+                        next_cand.append(candidates[i]|candidates[j])
     return next_cand
 
-      
+
         
 # Apriori algorithm 
 frequency={}
 cand1=create_cand1(toy_data.items)
 stop=False
-indice=0
+first=True
 candidates = []
 transactions=list(map(frozenset,toy_data.transactions))
 
 while stop == False:
-    if indice !=0:
-        candidates = gen_next_cand(candidates)
+    if first==False:
+        candidates = gen_next_cand(candidates) 
     else:
         candidates = cand1
-        
+        first=False
+         
     candidates,new_freq = min_support_cand(transactions,candidates,0.2)
     frequency.update(new_freq)
     
     if(len(candidates)==0):
         stop=True
-    indice +=1
+   
     
-    
-
-
-
-
